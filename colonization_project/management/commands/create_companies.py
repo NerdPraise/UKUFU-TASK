@@ -13,9 +13,9 @@ class Command(BaseCommand):
             try:
                 for company in companies:
                     Company.objects.create(
-                        name=company['company'], index=company['index'])
+                        name=company.get('company'), index=company.get('index'))
 
-            except (KeyError, IndexError) as e:
-                raise BaseCommand(e)
+            except Exception as e:
+                raise CommandError(e)
 
         return self.stdout.write(self.style.SUCCESS('Companies populated'))

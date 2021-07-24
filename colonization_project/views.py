@@ -1,54 +1,75 @@
-from django.http.response import Http404
+# from os import stat
+# from django.http.response import Http404
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+# from rest_framework import status
+# from rest_framework.response import Response
+# from rest_framework.generics import ListAPIView, RetrieveAPIView
 
-from django.shortcuts import render
+# from operator import attrgetter, itemgetter
 
-from colonization_project.serializers import (
-    CompanySerializer, UserProfileSerializer, UserSerializer,
-    FruitsSerializer, VegetableSerializer
-)
-from colonization_project.models import (
-    Company, User, UserProfile, Fruits, Vegetable
-)
+# from rest_framework.views import APIView
 
-
-class UserGetAPIView(ListAPIView, RetrieveAPIView):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def get_single_user_info(self, pk):
-        try:
-            user = User.objects.get(pk=pk)
-        except User.DoesNotExist:
-            raise Http404
-
-        serializer = self.serializer_class(user)
-
-        data = serializer.data
-        response = {
-            "username": serializer.data['username'],
-            "age": "30", "fruits": [
-                "banana", "apple"], "vegetables": ["beetroot", "lettuce"]}
-        return response
-
-    def get_multiple_user_info(self, **kwargs):
-        first_person = kwargs['pk']
-        second_person = kwargs['other_pk']
-
-        try:
-            first_user = User.objects.get(pk=first_person)
-            second_user = User.objects.get(pk=second_person)
-
-        except User.DoesNotExist:
-            raise Http404
-
-    def get_queryset(self):
-        return super().get_queryset()
+# from colonization_project.serializers import (
+#     CompanySerializer, UserProfileSerializer, UserSerializer,
+#     FruitsSerializer, VegetableSerializer
+# )
+# from colonization_project.models import (
+#     Company, Fruits, Vegetable
+# )
 
 
-class CompanyGetAPIView(RetrieveAPIView):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+# def destructure(d, *keys):
+#     return [d[k] if k in d else None for k in keys]
+
+
+# class UserGetAPIView(APIView):
+#     serializer_class = UserSerializer
+#     queryset = User.objects.all()
+
+#     def get_queryset(self, pk):
+#         try:
+#             user = User.objects.get(pk=pk)
+#         except User.DoesNotExist:
+#             raise Http404
+
+#         return self.serializer_class(user).data
+
+#     def get_single_user_info(self, pk):
+#         response = self.get_queryset(pk)
+
+#         return response
+
+#     def get_multiple_user_info(self, user_one, user_two):
+#         first_user = self.get_queryset(user_one)
+#         second_user = self.get_queryset(user_two)
+
+#         [username_o, age, address, phone] = destructure(first_user, ['username', 'age', 'address', 'phone'])
+
+
+#         # first_user_data = attrgetter(
+#         #     'name', 'age', 'address', 'phonenumber')(serializer_one.data)
+#         # second_user_data = attrgetter(
+#         #     'name', 'age', 'address', 'phonenumber')(serializer_two.data)
+
+#         response = {
+#             'user_one': ''
+#         }
+
+#     def post(self, *args, **kwargs):
+#         data = self.request.data
+#         user_one = data.get('user_one')
+#         user_two = data.get('user_two')
+#         if user_one and user_two:
+#             if user_one != user_two:
+#                 response = self.get_multiple_user_info(user_one, user_two)
+#                 return Response(response, status=status.HTTP_200_OK)
+#             return Response({'message': 'Specify different users please'}, status=status.HTTP_400_BAD_REQUEST)
+#         elif user_one or user_two:
+#             user = user_one or user_two
+#             response = self.get_single_user_info(user)
+#             return Response(response, status=status.HTTP_200_OK)
+
+
+# class CompanyGetAPIView(RetrieveAPIView):
+#     queryset = Company.objects.all()
+#     serializer_class = CompanySerializer
