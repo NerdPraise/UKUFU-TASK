@@ -1,6 +1,8 @@
 from phonenumber_field.modelfields import PhoneNumberField
 
 from django.db import models
+from django.db.models.signals import post_save
+
 
 GENDER_CHOICE = (
     ('Male', 'male'),
@@ -23,12 +25,12 @@ class Food(models.Model):
 
 class Fruits(Food):
     user = models.ForeignKey(
-        'Person', related_name='user_fruits', on_delete=models.CASCADE)
+        'Person', related_name='user_fruits', null=True, on_delete=models.CASCADE)
 
 
 class Vegetable(Food):
     user = models.ForeignKey(
-        'Person', related_name='user_veg', on_delete=models.CASCADE)
+        'Person', related_name='user_veg', null=True, on_delete=models.CASCADE)
 
 
 class Person(models.Model):
@@ -46,7 +48,7 @@ class Person(models.Model):
     address = models.TextField()
     phone = PhoneNumberField()
     greeting = models.TextField()
-    friends = models.ManyToManyField('self', blank=True)
+    friends = models.ManyToManyField('self', symmetrical=False)
     company = models.ForeignKey(
         'Company', related_name='employee', blank=True, null=True, on_delete=models.CASCADE)
 
