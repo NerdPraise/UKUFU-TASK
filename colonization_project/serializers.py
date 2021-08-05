@@ -6,13 +6,13 @@ from colonization_project.models import Company, Fruits, Person, Vegetable
 class FruitsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fruits
-        fields = '__all__'
+        fields = "__all__"
 
 
 class VegetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vegetable
-        fields = '__all__'
+        exclude = ("user",)
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -20,18 +20,28 @@ class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = "__all__"
 
     def get_employee(self, company):
         employees = company.employee.all()
-        employees_id = (employee.id for employee in employees)
-        return employees_id
+        employees_name = (employee.username for employee in employees)
+        return employees_name
 
 
 class PersonSerializer(serializers.ModelSerializer):
-    fruits = FruitsSerializer(many=True, read_only=True)
-    vegetables = VegetableSerializer(many=True, read_only=True)
+    fruits = serializers.SerializerMethodField()
+    vegetables = serializers.SerializerMethodField()
 
     class Meta:
         model = Person
-        fields = '__all__'
+        fields = "__all__"
+
+    def get_vegetables(self, person):
+        user_vegetables = person.vegetables.all()
+        vegetables = (vegetable.name for vegetable in user_vegetables)
+        return vegetables
+
+    def get_fruits(self, person):
+        user_fruits = person.fruits.all()
+        fruits = (fruit.name for fruit in user_fruits)
+        return fruits

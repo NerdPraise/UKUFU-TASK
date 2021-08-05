@@ -25,12 +25,12 @@ class Food(models.Model):
 
 class Fruits(Food):
     user = models.ManyToManyField(
-        'Person', related_name='fruits')
+        'Person', related_name='fruits', symmetrical=False)
 
 
 class Vegetable(Food):
     user = models.ManyToManyField(
-        'Person', related_name='vegetables')
+        'Person', related_name='vegetables', symmetrical=False)
 
 
 class Person(models.Model):
