@@ -107,11 +107,11 @@ response = {
 }
 ```
 NB: This project was made with some assumptions in mind
-1. Friendship were not symmetrical
+1. Friendships are not symmetrical
 2. Person's relationship with food is not symmetrical
 3. Some info like 'tags' and '_id' were ignored 
 4. Person guid is unique
 
 ### Test
-To run tests, you need to run `python manage.py test tests.units.<test suite you want to run> `
+To run tests, you need to run `python manage.py test tests.units.<test suite you want to run> `    
 Test suites => testcompany, testperson
