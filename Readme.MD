@@ -13,12 +13,13 @@ API References
 2. Create .env file and add a key value pair with the key DJANGO_SECRET_KEY `DJANGO_SECRET_KEY="<soome value>"`
 3. Run `python -m venv venv` to create a virtual environment
 4. Run `pip install -r requirements.txt` to install all the necessary required packages
-5. Run `python manage.py create_companies`
-6. Run `python manage.py create_persons`
-7. Run `python manage.py update_user_friends`
-8. Run `python manage.py update_persons_food`
-9. Run `python manage.py runserver` to start server and follow code snippet
-10. Using any request simulator of your choice, perform the following actions
+5. Run `python manage.py migrate` to migrate all migration files
+6. Run `python manage.py create_companies` to migrate all the company info into database
+7. Run `python manage.py create_persons` to migrate all the person info into databse
+8. Run `python manage.py update_user_friends` to update friends of persons into database
+9. Run `python manage.py update_persons_food` to update fruits and vegetable of persons into database
+10. Run `python manage.py runserver` to start server and follow code snippet
+11. Using any request simulator of your choice, perform the following actions
 
 ```python
 base_url = 'http://localhost:8000/v1/'
