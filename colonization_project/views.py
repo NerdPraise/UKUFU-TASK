@@ -99,6 +99,10 @@ class PersonGetAPIView(APIView):
             user = user_one or user_two
             response = self.get_single_user_info(user)
             return Response(response, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"message": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class CompanyGetAPIView(RetrieveAPIView):
