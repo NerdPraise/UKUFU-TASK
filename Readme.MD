@@ -82,16 +82,31 @@ request = {
     "user_two": <person_index>,
 }
 response = {
-    "username": "Maribel Cruz",
-    "age": 23,
-    "fruits": [
-        "apple"
-    ],
-    "vegetable": [
-        "cucumber",
-        "carrot",
-        "celery"
+    "user_one": {
+        "name": "Elsie Giles",
+        "age": 28,
+        "address": "937 Moffat Street, Dowling, Kansas, 578",
+        "phone": "+18775333748"
+    },
+    "user_two": {
+        "name": "Maribel Cruz",
+        "age": 23,
+        "address": "171 Krier Place, Deseret, South Carolina, 3117",
+        "phone": "+18065953921"
+    },
+    "common_friends": [
+        "Grace Kelly",
+        "Bonnie Bass",
+        "Cote Booth",
+        "Carmella Lambert",
+        "Decker Mckenzie",
+        "Rosemary Hayes",
+        "Mindy Beasley"
     ]
 }
 ```
 NB: This project was made with some assumptions in mind
+1. Friendship were not symmetrical
+2. Person's relationship with food is not symmetrical
+3. Some info like 'tags' and '_id' were ignored 
+4. Person guid is unique
