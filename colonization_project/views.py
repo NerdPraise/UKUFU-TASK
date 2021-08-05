@@ -13,7 +13,6 @@ from colonization_project.serializers import (
     CompanySerializer,
     PersonSerializer,
     FruitsSerializer,
-    VegetableSerializer,
 )
 from colonization_project.models import Company, Fruits, Person, Vegetable
 
@@ -37,6 +36,7 @@ class PersonGetAPIView(APIView):
                 raise Http404
 
     def get_single_user_info(self, pk):
+        """Returns a response when a single user is specified"""
         response = self.get_queryset(pk)
         serialized_data = self.serializer_class(response).data
 
@@ -52,7 +52,13 @@ class PersonGetAPIView(APIView):
 
         return new_response
 
+    def get_persons_with_required_feature(self, friends, **kwargs):
+        """Returns persons with features specified in kwargs"""
+        persons_qs = Person.objects.filter(pk__in=friends).filter(**kwargs)
+        return (person.username for person in persons_qs)
+
     def get_multiple_user_info(self, user_one, user_two):
+        """Returns a response when multiple users are specified"""
         users_qs = self.get_queryset([user_one, user_two])
         first_user = self.serializer_class(users_qs[0]).data
         second_user = self.serializer_class(users_qs[1]).data
@@ -65,6 +71,10 @@ class PersonGetAPIView(APIView):
             second_user, ["username", "age", "address", "phone", "friends"]
         )
         common_friends = set(friends_one).intersection(set(friends_two))
+        valid_friends = self.get_persons_with_required_feature(
+            common_friends, has_died=False, eye_color="brown"
+        )
+
         response = {
             "user_one": {
                 "name": username_one,
@@ -78,7 +88,7 @@ class PersonGetAPIView(APIView):
                 "address": address_two,
                 "phone": phone_two,
             },
-            "common_friends": common_friends,
+            "common_friends": valid_friends,
         }
 
         return response
