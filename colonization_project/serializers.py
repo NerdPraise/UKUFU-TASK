@@ -30,6 +30,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class PersonSerializer(serializers.ModelSerializer):
     fruits = serializers.SerializerMethodField()
+    friends = serializers.SerializerMethodField()
     vegetables = serializers.SerializerMethodField()
 
     class Meta:
@@ -45,3 +46,8 @@ class PersonSerializer(serializers.ModelSerializer):
         user_fruits = person.fruits.all()
         fruits = (fruit.name for fruit in user_fruits)
         return fruits
+
+    def get_friends(self, person):
+        user_friends = person.friends.all()
+        friends = (friend.username for friend in user_friends)
+        return friends

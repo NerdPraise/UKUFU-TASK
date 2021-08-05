@@ -9,7 +9,7 @@ Django >= 3.0.0
  
 API References
 ### Usage
-1. Clone project
+1. Clone project and cd into it
 2. Create .env file and add a key value pair with the key DJANGO_SECRET_KEY `DJANGO_SECRET_KEY="<soome value>"`
 3. Run `python -m venv venv` to create a virtual environment
 4. Run `pip install -r requirements.txt` to install all the necessary required packages
