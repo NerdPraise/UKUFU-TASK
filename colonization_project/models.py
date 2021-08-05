@@ -24,13 +24,13 @@ class Food(models.Model):
 
 
 class Fruits(Food):
-    user = models.ForeignKey(
-        'Person', related_name='user_fruits', null=True, on_delete=models.CASCADE)
+    user = models.ManyToManyField(
+        'Person', related_name='fruits')
 
 
 class Vegetable(Food):
-    user = models.ForeignKey(
-        'Person', related_name='user_veg', null=True, on_delete=models.CASCADE)
+    user = models.ManyToManyField(
+        'Person', related_name='vegetables')
 
 
 class Person(models.Model):

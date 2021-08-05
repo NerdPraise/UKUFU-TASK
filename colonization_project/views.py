@@ -1,11 +1,11 @@
 from os import stat
+from re import L
 from django.http.response import Http404
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 
-from operator import attrgetter, itemgetter
 
 from rest_framework.views import APIView
 
@@ -18,7 +18,8 @@ from colonization_project.models import (
 )
 
 
-def destructure(d, *keys):
+def destructure(d, keys):
+    """Custom object destructuring """
     return [d[k] if k in d else None for k in keys]
 
 
@@ -26,34 +27,47 @@ class PersonGetAPIView(APIView):
     serializer_class = PersonSerializer
     queryset = Person.objects.all()
 
-    def get_queryset(self, pk):
-        try:
-            user = Person.objects.get(pk=pk)
-        except Person.DoesNotExist:
-            raise Http404
-
-        return self.serializer_class(user).data
+    def get_queryset(self, user_id, **kwargs):
+        if isinstance(user_id, list):
+            return Person.objects.filter(pk__in=user_id)
+        else:
+            try:
+                return Person.objects.get(pk=user_id)
+            except Person.DoesNotExist:
+                raise Http404
 
     def get_single_user_info(self, pk):
         response = self.get_queryset(pk)
+        serialized_data = self.serializer_class(response).data
 
-        return response
+        [username, age, fruits, vegetable] = destructure(
+            serialized_data, ['username', 'age', 'fruits', 'vegetables'])
+        new_response = {
+            'username': username,
+            'age': age,
+            'fruits': fruits,
+            'vegetable': vegetable
+        }
+
+        return new_response
 
     def get_multiple_user_info(self, user_one, user_two):
-        first_user = self.get_queryset(user_one)
-        second_user = self.get_queryset(user_two)
+        users_qs = self.get_queryset([user_one,user_two ])
+        users = users_qs.annotate(friends="")
+        print(users_qs)
 
-        [username_o, age, address, phone] = destructure(
-            first_user, ['username', 'age', 'address', 'phone'])
+        [username_one, age_one, address_one, phone_one] = destructure(
+            users, ['username', 'age', 'address', 'phone'])
 
-        # first_user_data = attrgetter(
-        #     'name', 'age', 'address', 'phonenumber')(serializer_one.data)
-        # second_user_data = attrgetter(
-        #     'name', 'age', 'address', 'phonenumber')(serializer_two.data)
+        [username_two, age_two, address_two] = destructure(user_two, ['username', 'age', 'address', 'phone'])
 
         response = {
-            'user_one': ''
+            'user_one': {},
+            'user_two': '',
+            'common_friends': []
         }
+
+        return response
 
     def post(self, *args, **kwargs):
         data = self.request.data
@@ -73,3 +87,11 @@ class PersonGetAPIView(APIView):
 class CompanyGetAPIView(RetrieveAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+
+
+class FruitsGetAPIView(APIView):
+    serializer_class = FruitsSerializer
+    queryset = Fruits.objects.all()
+
+    def get(self, *args, **kwargs):
+        pass 

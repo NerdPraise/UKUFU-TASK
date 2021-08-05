@@ -29,6 +29,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class PersonSerializer(serializers.ModelSerializer):
+    fruits = FruitsSerializer(many=True, read_only=True)
+    vegetables = VegetableSerializer(many=True, read_only=True)
 
     class Meta:
         model = Person
